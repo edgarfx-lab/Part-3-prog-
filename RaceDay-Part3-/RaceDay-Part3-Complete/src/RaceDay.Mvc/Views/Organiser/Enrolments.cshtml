@@ -1,0 +1,8 @@
+@model JsonListViewModel
+@{ ViewData["Title"] = "Event enrolments"; }
+<span class="eyebrow">PARTICIPANT MANAGEMENT</span><h1 class="section-title">@Model.Title</h1>
+@if (!string.IsNullOrEmpty(Model.Message)) { <div class="alert alert-warning">@Model.Message</div> }
+<div class="table-responsive"><table class="table align-middle"><thead><tr><th>Participant</th><th>Category</th><th>Enrolled</th><th>Status</th><th>Update status</th></tr></thead><tbody>
+@foreach (var e in Model.Items) { <tr><td>@e.GetProperty("participantName").GetString()</td><td>@e.GetProperty("categoryName").GetString()</td><td>@e.GetProperty("enrolmentDate").GetDateTime().ToString("dd MMM yyyy")</td><td><span class="status-pill @e.GetProperty("status").GetString()?.ToLowerInvariant()">@e.GetProperty("status").GetString()</span></td><td><form asp-action="UpdateStatus" method="post" class="d-flex gap-2"><input type="hidden" name="EnrolmentId" value="@e.GetProperty("enrolmentId").GetInt32()" /><input type="hidden" name="eventId" value="@ViewBag.EventId" /><select name="Status" class="form-select form-select-sm"><option>Pending</option><option>Confirmed</option><option>Cancelled</option></select><button class="btn btn-sm btn-dark">Save</button></form></td></tr> }
+</tbody></table></div>
+@if (Model.Items.Count == 0) { <div class="empty-state">No participants have enrolled for this event yet.</div> }

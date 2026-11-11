@@ -1,0 +1,44 @@
+@model JsonListViewModel
+@{ ViewData["Title"] = "Race events"; }
+<section class="hero mb-4">
+    <div class="hero-content">
+        <span class="eyebrow">SOUTH AFRICA • RUN / WALK / CYCLE</span>
+        <h1>Find your pace.<br /><span>Own your race.</span></h1>
+        <p>Discover events, choose your challenge and make every finish line count.</p>
+        <a class="btn btn-race btn-lg" asp-controller="Account" asp-action="Register">Get started</a>
+    </div>
+</section>
+<div class="d-flex justify-content-between align-items-end flex-wrap gap-2 mb-3">
+    <div><span class="eyebrow">ON THE CALENDAR</span><h2 class="section-title">@Model.Title</h2></div>
+    <form method="get" class="d-flex gap-2 flex-wrap">
+        <select name="eventType" class="form-select"><option value="">All event types</option><option>Run</option><option>Walk</option><option>Cycle</option></select>
+        <input name="from" type="date" class="form-control" value="@ViewBag.From" />
+        <button class="btn btn-dark">Filter</button>
+    </form>
+</div>
+@if (!string.IsNullOrEmpty(Model.Message)) { <div class="alert alert-warning">@Model.Message</div> }
+<div class="row g-3">
+@foreach (var item in Model.Items)
+{
+    <div class="col-md-6 col-xl-4">
+        <article class="event-card h-100">
+            @if (item.TryGetProperty("bannerImageUrl", out var image) && image.ValueKind == JsonValueKind.String && !string.IsNullOrWhiteSpace(image.GetString()))
+            { <img class="event-image" src="@image.GetString()" alt="Event banner" /> }
+            else { <div class="event-image event-placeholder"><span>RACE DAY</span></div> }
+            <div class="p-3">
+                <span class="type-pill">@item.GetProperty("eventType").GetString()</span>
+                <h3 class="h5 mt-2">@item.GetProperty("name").GetString()</h3>
+                <p class="text-muted small mb-2">@item.GetProperty("location").GetString() · @item.GetProperty("distanceKm").GetDecimal().ToString("0.##") km</p>
+                <p class="small">@item.GetProperty("eventDate").GetDateTime().ToString("dd MMM yyyy")</p>
+                @if (Context.Session.GetString("UserRole") == "Participant")
+                { <a class="btn btn-race btn-sm" asp-controller="Participant" asp-action="Details" asp-route-id="@item.GetProperty("eventId").GetInt32()">View event</a> }
+                else if (Context.Session.GetString("UserRole") == "Organiser")
+                { <a class="btn btn-outline-dark btn-sm" asp-controller="Organiser" asp-action="Index">Organiser dashboard</a> }
+                else
+                { <a class="btn btn-outline-dark btn-sm" asp-controller="Account" asp-action="Login">Sign in to view details</a> }
+            </div>
+        </article>
+    </div>
+}
+</div>
+@if (Model.Items.Count == 0 && string.IsNullOrEmpty(Model.Message)) { <div class="empty-state">No events match your filters yet. Check back soon.</div> }

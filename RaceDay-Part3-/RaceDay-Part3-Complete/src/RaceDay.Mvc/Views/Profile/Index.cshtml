@@ -1,0 +1,12 @@
+@model ProfileViewModel
+@{ ViewData["Title"] = "My profile"; }
+<div class="form-shell wide"><span class="eyebrow">ACCOUNT SETTINGS</span><h1 class="section-title">My profile</h1>
+<div class="mb-3 text-muted">@Model.Email · @Model.Role</div>
+@if (!string.IsNullOrWhiteSpace(Model.ProfilePictureUrl)) { <img src="@Model.ProfilePictureUrl" alt="Profile picture" class="profile-avatar mb-3" /> }
+<form asp-action="Index" method="post" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+    <div class="row"><div class="col-md-6 mb-3"><label asp-for="FirstName" class="form-label"></label><input asp-for="FirstName" class="form-control" /></div><div class="col-md-6 mb-3"><label asp-for="LastName" class="form-label"></label><input asp-for="LastName" class="form-control" /></div></div>
+    <div class="mb-3"><label asp-for="PhoneNumber" class="form-label"></label><input asp-for="PhoneNumber" class="form-control" /></div>
+    <div class="mb-3"><label asp-for="ProfilePicture" class="form-label">Profile picture</label><input asp-for="ProfilePicture" type="file" accept="image/*" class="form-control" /><small class="text-muted">Maximum 5 MB. Upload is sent to the API and stored in Azure Blob Storage.</small></div>
+    <button class="btn btn-race">Save profile</button>
+</form></div>

@@ -1,0 +1,81 @@
+@model JsonListViewModel
+
+@{
+    ViewData["Title"] = "My results";
+
+    string Ordinal(int value)
+    {
+        int lastTwoDigits = value % 100;
+
+        if (lastTwoDigits == 11 || lastTwoDigits == 12 || lastTwoDigits == 13)
+        {
+            return value.ToString() + "th";
+        }
+
+        return (value % 10) switch
+        {
+            1 => value.ToString() + "st",
+            2 => value.ToString() + "nd",
+            3 => value.ToString() + "rd",
+            _ => value.ToString() + "th"
+        };
+    }
+}
+
+<span class="eyebrow">PERSONAL PERFORMANCE HISTORY</span>
+
+<h1 class="section-title">@Model.Title</h1>
+
+@if (!string.IsNullOrEmpty(Model.Message))
+{
+    <div class="alert alert-warning">@Model.Message</div>
+}
+
+<div class="table-responsive">
+    <table class="table align-middle">
+        <thead>
+            <tr>
+                <th>Event</th>
+                <th>Date</th>
+                <th>Category</th>
+                <th>Finish time</th>
+                <th>Position</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var r in Model.Items)
+            {
+                <tr>
+                    <td>@r.GetProperty("eventName").GetString()</td>
+                    <td>@r.GetProperty("eventDate").GetDateTime().ToString("dd MMM yyyy")</td>
+                    <td>@r.GetProperty("categoryName").GetString()</td>
+                    <td>
+                        @(r.TryGetProperty("finishTime", out var t) &&
+                          t.ValueKind != JsonValueKind.Null
+                            ? t.GetString()
+                            : "—")
+                    </td>
+                    <td>
+                        @(r.TryGetProperty("finishPosition", out var p) &&
+                          p.ValueKind != JsonValueKind.Null
+                            ? Ordinal(p.GetInt32())
+                            : "—")
+                        out of
+                        @(r.TryGetProperty("totalFinishers", out var total) &&
+                          total.ValueKind != JsonValueKind.Null
+                            ? total.GetInt32().ToString()
+                            : "—")
+                        finishers
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@if (Model.Items.Count == 0)
+{
+    <div class="empty-state">
+        Your results will appear here after an organiser records them.
+    </div>
+}

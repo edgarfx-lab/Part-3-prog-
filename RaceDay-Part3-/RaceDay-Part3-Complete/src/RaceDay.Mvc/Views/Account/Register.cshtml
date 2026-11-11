@@ -1,0 +1,15 @@
+@model RegisterViewModel
+@{ ViewData["Title"] = "Create account"; }
+<div class="form-shell">
+    <span class="eyebrow">BECOME PART OF THE COMMUNITY</span><h1 class="section-title">Create your account</h1>
+    <form asp-action="Register" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+        <div class="row"><div class="col-md-6 mb-3"><label asp-for="FirstName" class="form-label"></label><input asp-for="FirstName" class="form-control" /><span asp-validation-for="FirstName" class="text-danger"></span></div>
+        <div class="col-md-6 mb-3"><label asp-for="LastName" class="form-label"></label><input asp-for="LastName" class="form-control" /><span asp-validation-for="LastName" class="text-danger"></span></div></div>
+        <div class="mb-3"><label asp-for="Email" class="form-label"></label><input asp-for="Email" class="form-control" /><span asp-validation-for="Email" class="text-danger"></span></div>
+        <div class="mb-3"><label asp-for="Password" class="form-label"></label><input asp-for="Password" type="password" class="form-control" /><span asp-validation-for="Password" class="text-danger"></span><small class="text-muted">Use at least 8 characters.</small></div>
+        <div class="mb-3"><label asp-for="PhoneNumber" class="form-label">Phone number</label><input asp-for="PhoneNumber" class="form-control" /></div>
+        <div class="mb-3"><label asp-for="Role" class="form-label">Account type</label><select asp-for="Role" class="form-select"><option value="Participant">Participant</option><option value="Organiser">Organiser</option></select></div>
+        <button class="btn btn-race w-100">Create account</button>
+    </form>
+</div>

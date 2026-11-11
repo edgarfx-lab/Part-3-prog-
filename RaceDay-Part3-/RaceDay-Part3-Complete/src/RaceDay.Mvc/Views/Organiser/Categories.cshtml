@@ -1,0 +1,9 @@
+@model JsonListViewModel
+@{ ViewData["Title"] = "Categories"; }
+<div class="mb-3"><span class="eyebrow">EVENT CONFIGURATION</span><h1 class="section-title">@Model.Title</h1></div>
+@if (!string.IsNullOrEmpty(Model.Message)) { <div class="alert alert-warning">@Model.Message</div> }
+<div class="form-shell wide mb-4"><h2 class="h5">Add a category</h2>
+<form asp-action="AddCategory" method="post"><input type="hidden" name="EventId" value="@ViewBag.EventId" /><div class="row g-2"><div class="col-md-4"><input name="Name" class="form-control" placeholder="e.g. Open 10 km" required /></div><div class="col-md-6"><input name="Description" class="form-control" placeholder="Age group or distance details" /></div><div class="col-md-2"><button class="btn btn-race w-100">Add</button></div></div></form></div>
+<div class="table-responsive"><table class="table align-middle"><thead><tr><th>Category</th><th>Description</th><th></th></tr></thead><tbody>
+@foreach (var c in Model.Items) { <tr><td>@c.GetProperty("name").GetString()</td><td>@(c.TryGetProperty("description", out var d) ? d.GetString() : "")</td><td><form asp-action="DeleteCategory" method="post"><input type="hidden" name="id" value="@c.GetProperty("categoryId").GetInt32()" /><input type="hidden" name="eventId" value="@ViewBag.EventId" /><button class="btn btn-sm btn-outline-danger">Delete</button></form></td></tr> }
+</tbody></table></div>

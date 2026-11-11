@@ -1,0 +1,14 @@
+@model JsonElement
+@{ ViewData["Title"] = Model.GetProperty("name").GetString(); }
+<div class="event-detail">
+    @if (Model.TryGetProperty("bannerImageUrl", out var img) && img.ValueKind == JsonValueKind.String && !string.IsNullOrWhiteSpace(img.GetString())) { <img class="detail-image" src="@img.GetString()" alt="Event banner" /> }
+    <span class="type-pill mt-3">@Model.GetProperty("eventType").GetString()</span>
+    <h1 class="section-title mt-2">@Model.GetProperty("name").GetString()</h1>
+    <p class="lead">@Model.GetProperty("description").GetString()</p>
+    <div class="row g-3 my-3"><div class="col-sm-4"><div class="stat-card"><span>DATE</span><strong>@Model.GetProperty("eventDate").GetDateTime().ToString("dd MMM yyyy")</strong></div></div><div class="col-sm-4"><div class="stat-card"><span>LOCATION</span><strong>@Model.GetProperty("location").GetString()</strong></div></div><div class="col-sm-4"><div class="stat-card"><span>DISTANCE</span><strong>@Model.GetProperty("distanceKm").GetDecimal().ToString("0.##") km</strong></div></div></div>
+    <h2 class="h4">Available categories</h2>
+    @foreach (var c in (List<JsonElement>)ViewBag.Categories) {
+        <div class="category-row"><div><strong>@c.GetProperty("name").GetString()</strong><div class="text-muted small">@(c.TryGetProperty("description", out var d) ? d.GetString() : "")</div></div><form asp-action="Enrol" method="post"><input type="hidden" name="eventId" value="@Model.GetProperty("eventId").GetInt32()" /><input type="hidden" name="categoryId" value="@c.GetProperty("categoryId").GetInt32()" /><button class="btn btn-race btn-sm">Enrol</button></form></div>
+    }
+    @if (((List<JsonElement>)ViewBag.Categories).Count == 0) { <div class="alert alert-info">The organiser has not added categories yet.</div> }
+</div>

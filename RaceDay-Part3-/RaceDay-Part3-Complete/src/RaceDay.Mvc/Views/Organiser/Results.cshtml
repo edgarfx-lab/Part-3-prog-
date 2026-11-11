@@ -1,0 +1,11 @@
+@model JsonListViewModel
+@{ ViewData["Title"] = "Race results"; }
+<span class="eyebrow">RACE DAY TIMING</span><h1 class="section-title">@Model.Title</h1>
+@if (!string.IsNullOrEmpty(Model.Message)) { <div class="alert alert-warning">@Model.Message</div> }
+<div class="row g-3">
+@foreach (var e in Model.Items) {
+<div class="col-lg-6"><div class="event-card p-3"><h2 class="h5">@e.GetProperty("participantName").GetString()</h2><p class="text-muted small">@e.GetProperty("categoryName").GetString() · @e.GetProperty("status").GetString()</p>
+<form asp-action="SaveResult" method="post" class="row g-2"><input type="hidden" name="EnrolmentId" value="@e.GetProperty("enrolmentId").GetInt32()" /><input type="hidden" name="eventId" value="@ViewBag.EventId" />
+<div class="col-md-4"><label class="form-label small">Finish time</label><input name="FinishTime" type="time" step="1" class="form-control" /></div><div class="col-md-3"><label class="form-label small">Position</label><input name="FinishPosition" type="number" min="1" class="form-control" /></div><div class="col-md-3"><label class="form-label small">Finishers</label><input name="TotalFinishers" type="number" min="1" class="form-control" /></div><div class="col-md-2 d-flex align-items-end"><button class="btn btn-race btn-sm">Save</button></div></form></div></div>
+}
+</div>

@@ -1,0 +1,8 @@
+@model JsonListViewModel
+@{ ViewData["Title"] = "My enrolments"; }
+<span class="eyebrow">YOUR RACE CALENDAR</span><h1 class="section-title">@Model.Title</h1>
+@if (!string.IsNullOrEmpty(Model.Message)) { <div class="alert alert-warning">@Model.Message</div> }
+<div class="table-responsive"><table class="table align-middle"><thead><tr><th>Event</th><th>Category</th><th>Enrolment date</th><th>Status</th></tr></thead><tbody>
+@foreach (var e in Model.Items) { <tr><td>@e.GetProperty("eventName").GetString()</td><td>@e.GetProperty("categoryName").GetString()</td><td>@e.GetProperty("enrolmentDate").GetDateTime().ToString("dd MMM yyyy")</td><td><span class="status-pill @e.GetProperty("status").GetString()?.ToLowerInvariant()">@e.GetProperty("status").GetString()</span></td></tr> }
+</tbody></table></div>
+@if (Model.Items.Count == 0) { <div class="empty-state">You have not enrolled in an event yet. <a asp-action="Index">Explore events</a>.</div> }

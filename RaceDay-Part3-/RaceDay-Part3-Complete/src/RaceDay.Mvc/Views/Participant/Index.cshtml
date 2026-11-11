@@ -1,0 +1,22 @@
+@model JsonListViewModel
+@{ ViewData["Title"] = "Explore events"; }
+<span class="eyebrow">YOUR NEXT CHALLENGE</span><h1 class="section-title">@Model.Title</h1><p class="text-muted">Choose an event and a category that suits your goals.</p>
+<form method="get" class="d-flex gap-2 flex-wrap mb-3">
+    <select name="eventType" class="form-select" style="max-width:200px">
+        <option value="">All event types</option>
+        @foreach (var t in new[] { "Run", "Walk", "Cycle" }) { <option value="@t" selected="@(ViewBag.EventType == t)">@t</option> }
+    </select>
+    <input name="from" type="date" class="form-control" style="max-width:200px" value="@ViewBag.From" />
+    <button class="btn btn-dark">Filter</button>
+    <a class="btn btn-outline-secondary" asp-action="Index">Reset</a>
+</form>
+@if (!string.IsNullOrEmpty(Model.Message)) { <div class="alert alert-warning">@Model.Message</div> }
+<div class="row g-3">
+@foreach (var e in Model.Items) {
+<div class="col-md-6 col-xl-4"><article class="event-card h-100">
+@if (e.TryGetProperty("bannerImageUrl", out var img) && img.ValueKind == JsonValueKind.String && !string.IsNullOrWhiteSpace(img.GetString())) { <img class="event-image" src="@img.GetString()" alt="Event banner" /> } else { <div class="event-image event-placeholder"><span>RACE DAY</span></div> }
+<div class="p-3"><span class="type-pill">@e.GetProperty("eventType").GetString()</span><h2 class="h5 mt-2">@e.GetProperty("name").GetString()</h2><p class="text-muted small">@e.GetProperty("location").GetString() · @e.GetProperty("distanceKm").GetDecimal().ToString("0.##") km</p><p>@e.GetProperty("eventDate").GetDateTime().ToString("dd MMM yyyy, HH:mm")</p><a class="btn btn-race btn-sm" asp-action="Details" asp-route-id="@e.GetProperty("eventId").GetInt32()">View event & enrol</a></div>
+</article></div>
+}
+</div>
+@if (Model.Items.Count == 0) { <div class="empty-state">There are no upcoming events at the moment.</div> }

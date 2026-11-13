@@ -198,7 +198,7 @@ Record your own voice and screen. AI-generated voices are not permitted by the q
 
 Add the unlisted YouTube demonstration links for all three parts here before final submission:
 
-- Part 1: `[Add your unlisted Part 1 video URL]`
+- Part 1: `[Add your unlisted Part 1 v
 - Part 2: `[Add your unlisted Part 2 video URL]`
 - Part 3: 
 

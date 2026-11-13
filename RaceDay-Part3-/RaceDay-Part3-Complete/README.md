@@ -204,7 +204,7 @@ Add the unlisted YouTube demonstration links for all three parts here before fin
 
 Add your GitHub repository URL here before submitting:
 
-`[Add your RaceDay GitHub repository URL]
+
 
 
 ## 9. AI-use declaration

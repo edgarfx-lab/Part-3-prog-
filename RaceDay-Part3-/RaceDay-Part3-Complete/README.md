@@ -200,7 +200,7 @@ Add the unlisted YouTube demonstration links for all three parts here before fin
 
 - Part 1: `[Add your unlisted Part 1 video URL]`
 - Part 2: `[Add your unlisted Part 2 video URL]`
-- Part 3: `[Add your unlisted Part 3 demonstration video URL]`
+- Part 3: 
 
 Add your GitHub repository URL here before submitting:
 

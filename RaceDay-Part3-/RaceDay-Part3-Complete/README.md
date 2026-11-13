@@ -208,7 +208,7 @@ Add your GitHub repository URL here before submitting:
 
 Add your actual successful CI screenshot here before submitting:
 
-`[Add screenshot path or image link]`
+
 
 ## 9. AI-use declaration
 
